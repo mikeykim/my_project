@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>마이 판타지스타 / 우리가 골라보는 최고의 축구선수</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css"/>
+        <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+        <style>
+
+        </style>
+
+        <script>
+            $(document).ready(function () {
+                showStar();
+            });
+
+            function showStar() {
+                $.ajax({
+                    type: 'GET',
+                    url: '/api/list',
+                    data: {},
+                    success: function (response) {
+                        if (response['result'] == 'success') {
+                            let stars = response['stars_list'];
+
+                            for (let i = 0; i < stars.length; i++)}
+                    }
+                })
+            }
+
+            function likeStar(name) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/like',
+                    data: {
+                        'name_give': name
+                    },
+                    success: function (response) {
+                        if (response['result'] == 'success') {
+                            let msg = response['msg'];
+                            alert(msg);
+                        }
+                    }
+                })
+            }
+
+        </script>
