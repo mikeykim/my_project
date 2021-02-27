@@ -1,19 +1,47 @@
 <!DOCTYPE html>
 <html lang="ko">
     <head>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>마이 판타지스타 / 우리가 골라보는 최고의 축구선수</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+              crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+                integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+                crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+                integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+                crossorigin="anonymous"></script>
+        <title>내가 뽑는 축신 | My "Fantasy Star"</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css"/>
         <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-
         <style>
+            .center {
+                text-align: center;
+            }
 
+            .star-list {
+                width: 500px;
+                margin: 20px auto 0 auto;
+            }
+
+            .star-name {
+                display: inline-block;
+            }
+
+            .star-name:hover {
+                text-decoration: underline;
+            }
+
+            .card {
+                margin-bottom: 15px;
+            }
         </style>
-
         <script>
             $(document).ready(function () {
+                // index.html 로드가 완료되면 자동으로 showStar() 함수를 호출합니다.
                 showStar();
             });
 
@@ -26,9 +54,55 @@
                         if (response['result'] == 'success') {
                             let stars = response['stars_list'];
 
-                            for (let i = 0; i < stars.length; i++)}
+                            for (let i = 0; i < stars.length; i++) {
+                                let star = stars[i]
+                                let name = star['name']
+                                let url = star['url']
+                                let imgUrl = star['img_url']
+                                let recentMovie = star['recent']
+                                let like = star['like']
+
+                                let tempHtml = `<div class="card">
+                                                <div class="card-content">
+                                                    <div class="media">
+                                                        <div class="media-left">
+                                                            <figure class="image is-48x48">
+                                                                <img
+                                                                        src="${imgUrl}"
+                                                                        alt="Placeholder image"
+                                                                />
+                                                            </figure>
+                                                        </div>
+                                                        <div class="media-content">
+                                                            <a href="${url}" target="_blank" class="star-name title is-4">${name} (좋아요: ${like})</a>
+                                                            <p class="subtitle is-6">${recentMovie}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <footer class="card-footer">
+                                                    <a href="#" onclick="likeStar('${name}')" class="card-footer-item has-text-info">
+                                                        위로!
+                                                        <span class="icon">
+                                              <i class="fas fa-thumbs-up"></i>
+                                            </span>
+                                                    </a>
+                                                    <a href="#" onclick="deleteStar('${name}')" class="card-footer-item has-text-danger">
+                                                        삭제
+                                                        <span class="icon">
+                                              <i class="fas fa-ban"></i>
+                                            </span>
+                                                    </a>
+                                                </footer>
+                                            </div>`
+
+                                $('#star-box').append(tempHtml);
+
+                            }
+
+
+                        }
                     }
-                })
+                });
             }
 
             function likeStar(name) {
@@ -36,15 +110,52 @@
                     type: 'POST',
                     url: '/api/like',
                     data: {
+                        'name_give':name
+                    },
+                    success: function (response) {
+                        if (response['result'] == 'success') {
+                            let msg = response['msg'];
+                            alert(msg);
+                            window.location.reload();
+                        }
+                    }
+                });
+            }
+
+            function deleteStar(name) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/delete',
+                    data: {
                         'name_give': name
                     },
                     success: function (response) {
                         if (response['result'] == 'success') {
                             let msg = response['msg'];
                             alert(msg);
+                            window.location.reload();
                         }
                     }
-                })
+                });
             }
 
         </script>
+    </head>
+    <body>
+        <section class="hero is-warning">
+            <div class="hero-body">
+                <div class="container center">
+                    <h1 class="title">
+                        MY Fantasy Star
+                    </h1>
+                    <h2 class="subtitle">
+                        순위를 매겨봅시다
+                    </h2>
+                </div>
+            </div>
+        </section>
+        <div class="star-list" id="star-box">
+
+        </div>
+    </body>
+</html>
