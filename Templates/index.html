@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko">
     <head>
+        <meta property="og:title" content="마이 판타지 스타"/>
+        <meta property="og:description" content="이번주의 축신은 누구 "/>
+        <meta property="og:image" content="{{ url_for('static', filename='main.jpg') }}"/>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -38,6 +41,8 @@
             .card {
                 margin-bottom: 15px;
             }
+
+
         </style>
         <script>
             $(document).ready(function () {
@@ -56,11 +61,12 @@
 
                             for (let i = 0; i < stars.length; i++) {
                                 let star = stars[i]
-                                let name = star['name']
-                                let url = star['url']
                                 let imgUrl = star['img_url']
-                                let recentMovie = star['recent']
-                                let like = star['like']
+                                let name = star['name']
+                                let position = star['position']
+                                let match = star['match']
+                                let goal = star['goal']
+                                let assi = star['assi']
 
                                 let tempHtml = `<div class="card">
                                                 <div class="card-content">
@@ -110,7 +116,7 @@
                     type: 'POST',
                     url: '/api/like',
                     data: {
-                        'name_give':name
+                        'name_give': name
                     },
                     success: function (response) {
                         if (response['result'] == 'success') {
@@ -143,19 +149,60 @@
     </head>
     <body>
         <section class="hero is-warning">
-            <div class="hero-body">
+            <div style="background-color:rebeccapurple" ; class="hero-body">
                 <div class="container center">
-                    <h1 class="title">
-                        MY Fantasy Star
+                    <h1 style="font-size: 50px;color: white; font-family:Verdana;  " ; class="title">
+                        <img src="https://1000logos.net/wp-content/uploads/2017/05/Premier-League-logo-500x210.png"
+                             width="200" height="200"><strong>MY Fantasy Star</strong>
                     </h1>
-                    <h2 class="subtitle">
-                        순위를 매겨봅시다
+                    <h2 style="font-size:30px;color: white; font-family: Verdana;" ; class="subtitle">
+                        <strong>나만의 축신에 투표해주세요!</strong>
                     </h2>
                 </div>
             </div>
         </section>
         <div class="star-list" id="star-box">
 
+
+            <div class="row">
+                <div class="media">
+                    <div class="media-left">
+                        <figure class="image is-48x48">
+                            <img
+                                    src="https://search.pstatic.net/common/?src=https%3A%2F%2Fssl.pstatic.net%2Fsstatic%2Fpeople%2Fportrait%2F201807%2F20180731143610623-6213324.jpg&type=u120_150&quality=95"
+                                    alt="Placeholder image"
+                            />
+                        </figure>
+                    </div>
+                    <div style="font-family:MS Gothic"; class="col-sm-8"><b>손흥민</b></div>
+                    <div style="font-family:MS Gothic"; class="col-sm-4"><b>포지션:공격수</b></div>
+                </div>
+                <div class="row">
+                    <div style="font-family:MS Gothic"; class="col-sm"><b>출전 경기수:23</b></div>
+                    <div style="font-family:MS Gothic"; class="col-sm"><b>골: 13</b></div>
+                    <div style="font-family:MS Gothic"; class="col-sm"><b>어시스트:7</b></div>
+                </div>
+                <br>
+                <br>
+                <br>
+                <footer class="card-footer">
+                    <a href="#" onclick="likeStar('김다미')" class="card-footer-item has-text-info">
+                        축신!
+                        <span class="icon">
+              <i class="fas fa-thumbs-up"></i>
+            </span>
+
+                    </a>
+                    <br>
+                    <a href="#" onclick="deleteStar('김다미')" class="card-footer-item has-text-danger">
+                        별로
+                        <span class="icon">
+              <i class="fas fa-ban"></i>
+            </span>
+                    </a>
+                </footer>
+            </div>
         </div>
     </body>
+
 </html>
